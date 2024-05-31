@@ -1,0 +1,13 @@
+-- Identify the most popular routes
+SELECT
+	departure_station,
+	arrival_station,
+	COUNT(*) AS trip_count
+FROM
+	railway
+GROUP BY
+	departure_station,
+	arrival_station
+	having count(*) >= 1000
+ORDER BY
+	trip_count DESC;

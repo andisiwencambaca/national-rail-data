@@ -1,0 +1,38 @@
+-- Determine peak travel times
+SELECT
+	TO_CHAR(date_of_journey, 'Mon') AS MONTH,
+	CASE EXTRACT(
+			isodow
+			FROM
+				date_of_journey
+		)
+		WHEN 1 THEN 'Monday'
+		WHEN 2 THEN 'Tuesday'
+		WHEN 3 THEN 'Wednesday'
+		WHEN 4 THEN 'Thursday'
+		WHEN 5 THEN 'Friday'
+		WHEN 6 THEN 'Saturday'
+		WHEN 7 THEN 'Sunday'
+	END AS travel_day,
+	EXTRACT(
+		HOUR
+		FROM
+			departure_time
+	) AS travel_hour,
+	COUNT(*) AS trip_count
+FROM
+	railway
+GROUP BY
+	TO_CHAR(date_of_journey, 'Mon'),
+	EXTRACT(
+		HOUR
+		FROM
+			departure_time
+	),
+	EXTRACT(
+		isodow
+		FROM
+			date_of_journey
+	)
+ORDER BY
+	trip_count DESC

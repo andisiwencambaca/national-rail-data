@@ -1,0 +1,23 @@
+--average delay by reason
+SELECT
+	reason_for_delay,
+	COUNT(*) AS total_delays,
+	AVG(
+		CASE
+			WHEN journey_status = 'Delayed' THEN EXTRACT(
+				epoch
+				FROM
+					(actual_arrival_time - arrival_time)
+			) / 60
+			ELSE 0
+		END
+	) AS avg_arrival_delay_minutes
+FROM
+	railway
+WHERE
+	journey_status = 'Delayed'
+	AND reason_for_delay IS NOT NULL
+GROUP BY
+	reason_for_delay
+ORDER BY
+	total_delays DESC;

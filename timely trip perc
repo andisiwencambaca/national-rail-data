@@ -1,0 +1,19 @@
+--ON TIME percentage
+SELECT
+	COUNT(*) AS total_trips,
+	SUM(
+		CASE
+			WHEN journey_status = 'On Time' THEN 1
+			ELSE 0
+		END
+	) AS on_time_trips,
+	(
+		SUM(
+			CASE
+				WHEN journey_status = 'On Time' THEN 1
+				ELSE 0
+			END
+		)::decimal / COUNT(*)
+	) * 100 AS on_time_percentage
+FROM
+	railway;
